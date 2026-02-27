@@ -11,7 +11,7 @@ const int buzz = 4;
 const int bbtn = A3;  
 const int led = 6;
 const int sound = A5;
-float sinepitch = 0;
+int sinepitch = 0;
 
 void setup() {
   pinMode(In1, OUTPUT);
@@ -87,26 +87,32 @@ void loop() {
   
   sinepitch += 1;
 
-  float pitch = (500*sin(0.5*sinepitch) + 1500);
-  Serial.println(pitch);
+  float buzzspeed = analogRead(pot);
+  buzzspeed = map(buzzspeed,0,1023,0,10);
+  
 
-  if (pressed == true){
-   	tone(buzz, pitch);
-  } else if (pressed == false){
-    noTone(buzz);
-  }
+  float pitch = (500*sin((buzzspeed/100)*sinepitch) + 1500);
+  Serial.println(pitch);
+  
+  // if (pressed == true){
+  //  	tone(buzz, pitch);
+  // } else if (pressed == false){
+  //   noTone(buzz);
+  // }
   
 
   int motorsound = map(analogRead(sound),0,1023,0,250);
 
   //Serial.println(motorsound);
   if (pressed) {
+    tone(buzz,pitch);
     goReverse(motorsound);
   } else {
     goStraight(motorsound);
+    noTone(buzz);
   }
 
-  delay(50);
+  //delay(50);
 
 }
 
