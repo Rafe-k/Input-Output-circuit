@@ -25,13 +25,15 @@ void setup() {
 
   myservo.attach(3);
   Serial.begin(9600);
+  
 }
 
 void goStraight(int val) {
+
+  // turn on motor A
   digitalWrite(In1, HIGH);
-  
   digitalWrite(In2, LOW);
-  
+  // set speed between 150 and 255
   analogWrite(EnA, val);
 }
 
@@ -39,6 +41,7 @@ void goReverse(int val) {
   digitalWrite(In1, LOW);
 
   digitalWrite(In2, HIGH);
+  // set speed between 150 and 255
 
   analogWrite(EnA, val);
 }
@@ -53,21 +56,27 @@ void loop() {
 
   long duration, cm;
 
-  // ultra sensor stuff
   digitalWrite(trig, LOW);
   delayMicroseconds(2);
   digitalWrite(trig, HIGH);
   delayMicroseconds(5);
   digitalWrite(trig, LOW);
 
+  
+
   duration = pulseIn(echo, HIGH);
-  // calculating ultra sensor distance
   cm = distanceConvert(duration);
   int dis = map(cm, 0, 1023, 0, 100);
   
   // a map for the ultra sensor 
-  int leddis = map(cm,0,200,255,0);
+  long leddis = map(cm,0,200,255,0);
 
+  if (leddis < 0) {
+    leddis = 0;
+  }
+
+  Serial.println(leddis);
+  
   // turns on led
   analogWrite(led,leddis);
 
@@ -82,12 +91,9 @@ void loop() {
   // sets pitch for button using a sine wave
   float pitch = (500*sin((buzzspeed/100)*sinepitch) + 1500);
   
-  //Serial.println(pitch);
-  
   // sets speed for motor
   int motorsound = map(analogRead(sound),0,1023,0,250);
 
-  Serial.println(motorsound);
 
   // turns on/off button and determined motor spin direction
   if (pressed) {
