@@ -3,7 +3,7 @@
 Servo myservo;
 const int In1 = 8;
 const int In2 = 11;
-const int EnA = 3;
+const int EnA = 5;
 const int pot = A0;
 const int trig = A1;
 const int echo = A2;
@@ -23,17 +23,15 @@ void setup() {
   pinMode(led, OUTPUT);
   pinMode(sound, INPUT);
 
-  myservo.attach(5);
+  myservo.attach(3);
   Serial.begin(9600);
-  
 }
 
 void goStraight(int val) {
-
-  // turn on motor A
   digitalWrite(In1, HIGH);
+  
   digitalWrite(In2, LOW);
-  // set speed between 150 and 255
+  
   analogWrite(EnA, val);
 }
 
@@ -41,7 +39,6 @@ void goReverse(int val) {
   digitalWrite(In1, LOW);
 
   digitalWrite(In2, HIGH);
-  // set speed between 150 and 255
 
   analogWrite(EnA, val);
 }
@@ -56,15 +53,15 @@ void loop() {
 
   long duration, cm;
 
+  // ultra sensor stuff
   digitalWrite(trig, LOW);
   delayMicroseconds(2);
   digitalWrite(trig, HIGH);
   delayMicroseconds(5);
   digitalWrite(trig, LOW);
 
-  
-
   duration = pulseIn(echo, HIGH);
+  // calculating ultra sensor distance
   cm = distanceConvert(duration);
   int dis = map(cm, 0, 1023, 0, 100);
   
@@ -89,6 +86,8 @@ void loop() {
   
   // sets speed for motor
   int motorsound = map(analogRead(sound),0,1023,0,250);
+
+  Serial.println(motorsound);
 
   // turns on/off button and determined motor spin direction
   if (pressed) {
