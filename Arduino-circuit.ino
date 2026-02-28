@@ -35,15 +35,6 @@ void goStraight(int val) {
   digitalWrite(In2, LOW);
   // set speed between 150 and 255
   analogWrite(EnA, val);
-
-
-  //delay(2000);
-
-  // now turn off motors
-
-  // digitalWrite(In1, LOW);
-
-  // digitalWrite(In2, LOW);
 }
 
 void goReverse(int val) {
@@ -57,8 +48,10 @@ void goReverse(int val) {
 void loop() {
   int val = analogRead(pot);
 
+  // sets speed for servo depending on potentiometer rotation
   val = map(val, 0, 1023, 0, 300);
 
+  // turns on servo
   myservo.write(val);
 
   long duration, cm;
@@ -75,14 +68,13 @@ void loop() {
   cm = distanceConvert(duration);
   int dis = map(cm, 0, 1023, 0, 100);
   
-
+  // a map for the ultra sensor 
   int leddis = map(cm,0,200,255,0);
-  
 
-  
-
+  // turns on led
   analogWrite(led,leddis);
 
+  // bool for checking if button is pressed
   bool pressed = digitalRead(bbtn);
   
   sinepitch += 1;
@@ -90,20 +82,15 @@ void loop() {
   float buzzspeed = analogRead(pot);
   buzzspeed = map(buzzspeed,0,1023,0,10);
   
-
+  // sets pitch for button using a sine wave
   float pitch = (500*sin((buzzspeed/100)*sinepitch) + 1500);
-  Serial.println(pitch);
   
-  // if (pressed == true){
-  //  	tone(buzz, pitch);
-  // } else if (pressed == false){
-  //   noTone(buzz);
-  // }
+  //Serial.println(pitch);
   
-
+  // sets speed for motor
   int motorsound = map(analogRead(sound),0,1023,0,250);
 
-  //Serial.println(motorsound);
+  // turns on/off button and determined motor spin direction
   if (pressed) {
     tone(buzz,pitch);
     goReverse(motorsound);
