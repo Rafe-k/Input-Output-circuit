@@ -92,7 +92,7 @@ void loop() {
   float pitch = (500*sin((buzzspeed/100)*sinepitch) + 1500);
   
   // sets speed for motor
-  int motorsound = map(analogRead(sound),0,500,0,250);
+  int motorsound = map(analogRead(sound),0,1023,0,250);
 
 
   // turns on/off button and determined motor spin direction
